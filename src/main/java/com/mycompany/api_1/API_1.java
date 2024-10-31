@@ -16,19 +16,17 @@ public class API_1 {
 
     public static void main(String[] args) {
         try {
-            // Crear la URL
+            
             URL url = new URL(API_URL);
             // Abrir conexión
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
-            // Comprobar si la solicitud fue exitosa
             if (conn.getResponseCode() != 200) {
                 throw new RuntimeException("Error: HTTP response code " + conn.getResponseCode());
             }
 
-            // Leer la respuesta
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuilder response = new StringBuilder();
             String line;
@@ -36,17 +34,13 @@ public class API_1 {
                 response.append(line);
             }
 
-            // Cerrar conexión
             conn.disconnect();
 
-            // Procesar JSON
             JSONObject jsonResponse = new JSONObject(response.toString());
             JSONArray features = jsonResponse.getJSONArray("features");
 
-            // Mostrar número de terremotos
             System.out.println("Número de terremotos encontrados: " + features.length());
 
-            // Recorrer los terremotos y mostrar información básica
             for (int i = 0; i < features.length(); i++) {
                 JSONObject feature = features.getJSONObject(i);
                 JSONObject properties = feature.getJSONObject("properties");
